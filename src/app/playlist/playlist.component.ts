@@ -4,7 +4,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { shuffle } from 'lodash-es';
-import { fromEvent, interval, Subject } from 'rxjs';
+import { Subject, fromEvent, interval } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import {
   DeletePlaylistDialogComponent,
@@ -57,11 +57,11 @@ type MatSortDirectionType = 'asc' | 'desc';
 
 function sortingDataAccessor(track: ITrackWFeatures, sortHeaderId: string): string | number {
   if (sortHeaderId === ESortableColumns.name) {
-    return track.track.name;
+    return track.track.name.toLocaleLowerCase();
   } else if (sortHeaderId === ESortableColumns.artist) {
-    return track.track.artists[0].name;
+    return track.track.artists[0].name.toLocaleLowerCase();
   } else if (sortHeaderId === ESortableColumns.album_name) {
-    return track.track.album.name;
+    return track.track.album.name.toLocaleLowerCase();
   } else if (sortHeaderId === ESortableColumns.release_date) {
     return getReleaseDate(track);
   } else if (sortHeaderId === ESortableColumns.duration_ms) {
