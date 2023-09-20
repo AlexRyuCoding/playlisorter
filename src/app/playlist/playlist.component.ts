@@ -313,7 +313,7 @@ export class PlaylistComponent implements OnInit, OnDestroy {
     if (this.dataSource.sort) {
       const updatedOrder: string[] = this.dataSource
         .sortData(this.dataSource.filteredData, this.dataSource.sort)
-        .map((track: ITrackWFeatures) => track.uri)
+        .map((track: ITrackWFeatures) => track.track.uri)
         .filter((uri: string) => !!uri);
 
       if (this.playlist) {
