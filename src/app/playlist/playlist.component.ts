@@ -59,22 +59,24 @@ function sortingDataAccessor(track: ITrackWFeatures, sortHeaderId: string): stri
   if (sortHeaderId === ESortableColumns.name) {
     return track.track.name;
   } else if (sortHeaderId === ESortableColumns.artist) {
-    return track.track.artists[0].name;
+    return track.track.type === 'track' ? track.track.artists[0].name : track.track.show.publisher;
   } else if (sortHeaderId === ESortableColumns.album_name) {
-    return track.track.album.name;
+    return track.track.type === 'track' ? track.track.album.name : track.track.show.publisher;
   } else if (sortHeaderId === ESortableColumns.release_date) {
     return getReleaseDate(track);
   } else if (sortHeaderId === ESortableColumns.duration_ms) {
     return track.track.duration_ms;
   } else if (sortHeaderId === ESortableColumns.popularity) {
-    return track.track.popularity;
+    return track.track.type === 'track' ? track.track.popularity : 0;
   } else {
     return (track as any)[sortHeaderId];
   }
 }
 
 function getReleaseDate(track: ITrackWFeatures): string {
-  return new Date((<any>track.track.album).release_date).toISOString();
+  if (track.track.type === 'track') return new Date((<any>track.track.album).release_date).toISOString();
+  else if (track.track.type === 'episode') return new Date((<any>track.track).release_date).toISOString();
+  else return '';
 }
 
 const sortableColumns: string[] = Object.keys(ESortableColumns);
@@ -315,14 +317,15 @@ export class PlaylistComponent implements OnInit, OnDestroy {
         .sortData(this.dataSource.filteredData, this.dataSource.sort)
         .map((track: ITrackWFeatures) => track.uri)
         .filter((uri: string) => !!uri);
-
+      console.log(updatedOrder);
+      console.log(this.tracks);
       if (this.playlist) {
         const data: ISavePlaylistDialogData = {
           ownsPlaylist: this.ownsPlaylist,
           playlistId: this.playlist?.id,
           tracks: updatedOrder,
           playlistName: this.playlist.name,
-          playlistDescription: this.playlist.description,
+          playlistDescription: this.playlist.description || '',
         };
         const dialog: MatDialogRef<SavePlaylistDialogComponent> = this._matDialog.open(SavePlaylistDialogComponent, {
           data,
@@ -416,13 +419,21 @@ export class PlaylistComponent implements OnInit, OnDestroy {
   }
 
   getPreviewUrl(track: ITrackWFeatures): string {
-    return track.track.preview_url;
+    return track.track.type === 'track' ? track.track.preview_url : track.track.audio_preview_url || '';
   }
 
   getAlbumImageUrl(track: ITrackWFeatures): string {
-    return (
-      (track.track.album.images.length > 0 && track.track.album.images[track.track.album.images.length - 1].url) || ''
-    );
+    console.log('getAlbumImageUrl is running');
+    if (track.track.type === 'track' && track.track.album.images.length)
+      return (
+        (track.track.album.images.length && track.track.album.images[track.track.album.images.length - 1].url) || ''
+      );
+    else if (track.track.type === 'episode') {
+      console.log('here is episode images object: ' + JSON.stringify(track.track, null, 2));
+      return (
+        (track.track.images && track.track.images.length && track.track.images[track.track.images.length - 1].url) || ''
+      );
+    } else return '';
   }
 
   getSpotifyUrl(track: ITrackWFeatures): string {
@@ -434,7 +445,7 @@ export class PlaylistComponent implements OnInit, OnDestroy {
   }
 
   getFirstArtist(track: ITrackWFeatures): string {
-    return track.track.artists[0].name;
+    return track.track.type === 'track' ? track.track.artists[0].name : track.track.show && track.track.show.publisher;
   }
 
   getAddedAt(track: ITrackWFeatures): string {
@@ -442,7 +453,7 @@ export class PlaylistComponent implements OnInit, OnDestroy {
   }
 
   getPopularity(track: ITrackWFeatures): number {
-    return track.track.popularity;
+    return track.track.type === 'track' ? track.track.popularity : 0;
   }
 
   getDuration(track: ITrackWFeatures): Date {
@@ -450,11 +461,13 @@ export class PlaylistComponent implements OnInit, OnDestroy {
   }
 
   getAllArtists(track: ITrackWFeatures): string {
-    return track.track.artists.map((artist) => artist.name).join(', ');
+    return track.track.type === 'track'
+      ? track.track.artists.map((artist) => artist.name).join(', ')
+      : track.track.show.publisher; //changed. can't find list of speakers(episode)
   }
 
   getAlbumName(track: ITrackWFeatures): string {
-    return track.track.album.name;
+    return track.track.type === 'track' ? track.track.album.name : track.track.show && track.track.show.name; //publisher or episode name?
   }
 
   getReleaseDate(track: ITrackWFeatures): string {

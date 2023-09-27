@@ -66,7 +66,7 @@ export class SpotifyWebApiService {
     return await spotifyApi.getTrack(trackId);
   }
 
-  async deletePlaylist(playlistId: string): Promise<SpotifyApi.UnfollowPlaylistReponse> {
+  async deletePlaylist(playlistId: string): Promise<SpotifyApi.UnfollowPlaylistResponse> {
     return await spotifyApi.unfollowPlaylist(playlistId);
   }
 
@@ -104,7 +104,7 @@ export class SpotifyWebApiService {
     }
   }
 
-  async updatePlaylistDetails(playlistId: string, details: object): Promise<SpotifyApi.ChangePlaylistDetailsReponse> {
+  async updatePlaylistDetails(playlistId: string, details: object): Promise<SpotifyApi.ChangePlaylistDetailsResponse> {
     return await spotifyApi.changePlaylistDetails(playlistId, details);
   }
 
@@ -126,7 +126,7 @@ export class SpotifyWebApiService {
   }
 
   async getTopSongsPlaylists(): Promise<SpotifyApi.PlaylistTrackResponse[]> {
-    const topSongsPlaylists: SpotifyApi.CategoryPlaylistsReponse = await spotifyApi.getCategoryPlaylists('2019');
+    const topSongsPlaylists: SpotifyApi.CategoryPlaylistsResponse = await spotifyApi.getCategoryPlaylists('2019');
     const playlistPromises: Promise<SpotifyApi.PlaylistTrackResponse>[] = topSongsPlaylists.playlists.items
       .filter((playlist: SpotifyApi.PlaylistObjectSimplified) => playlist.name.startsWith('Your Top Songs'))
       .map((playlist: SpotifyApi.PlaylistObjectSimplified) => this.getPlaylistTracks(playlist.id));
