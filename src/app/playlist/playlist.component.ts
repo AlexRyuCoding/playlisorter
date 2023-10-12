@@ -20,6 +20,10 @@ import { ITrackWFeatures, SpotifyWebApiService } from '../services/spotify-web-a
 import { StateService } from '../services/state.service';
 import { getAlbumCover } from '../shared';
 
+import { majorOrder } from '../services/spotify-web-api.service';
+
+import { minorOrder } from '../services/spotify-web-api.service';
+
 enum ENonSortableColumns {
   'index' = 'index',
   'image_url' = 'image_url',
@@ -40,6 +44,7 @@ enum ESortableColumns {
   'energy' = 'energy',
   'instrumentalness' = 'instrumentalness',
   'key' = 'key',
+  'circle_of_fifths' = 'circle_of_fifths',
   'liveness' = 'liveness',
   'loudness' = 'loudness',
   'mode' = 'mode',
@@ -465,5 +470,161 @@ export class PlaylistComponent implements OnInit, OnDestroy {
     // TODO: find optimal sort order
   }
 
+  getHumanReadibleMode(mode: number): string {
+    return mode === 1 ? 'Major' : 'Minor';
+  }
+
+  getHumanReadibleKey(key: number): string {
+    return EKeys[key];
+    // switch (key) {
+    //   case 0:
+    //     return EKeys.CMaj;
+    //   case 1:
+    //     return EKeys.CSharpDFlatMaj;
+    //   case 2:
+    //     return EKeys.DMaj;
+    //   case 3:
+    //     return EKeys.DSharpEFlatMaj;
+    //   case 4:
+    //     return EKeys.EMaj;
+    //   case 5:
+    //     return EKeys.FMaj;
+    //   case 6:
+    //     return EKeys.FSharpGFlatMaj;
+    //   case 7:
+    //     return EKeys.GMaj;
+    //   case 8:
+    //     return EKeys.GSharpAFlatMaj;
+    //   case 9:
+    //     return EKeys.AMaj;
+    //   case 10:
+    //     return EKeys.ASharpBFlatMaj;
+    //   case 11:
+    //     return EKeys.BMaj;
+    //   default:
+    //     return EKeys.InvalidKey;
+    // }
+  }
+
+  getHumanReadibleKeyMode(circle_of_fifths: number): string {
+    // check iif its major or minor based on math
+    // then acces correct majorOrder or minorOrder array
+    return ECircleOf5ths[circle_of_fifths * 2];
+    // originalKey = majorOrder[circleOfFifthValue]
+    // switch case or a if else that handles 24 values
+    // switch (circleOfFifthValue) {
+    //   case 0:
+    //     return ECircleOf5ths[circleOfFifthValue];
+    //   case 0.5:
+    //     return EKeys.AMin;
+    //   case 1:
+    //     return EKeys.GMaj;
+    //   case 1.5:
+    //     return EKeys.EMin;
+    //   case 2:
+    //     return EKeys.DMaj;
+    //   case 2.5:
+    //     return EKeys.BMin;
+    //   case 3:
+    //     return EKeys.AMaj;
+    //   case 3.5:
+    //     return EKeys.FSharpGFlatMin;
+    //   case 4:
+    //     return EKeys.EMaj;
+    //   case 4.5:
+    //     return EKeys.CSharpDFlatMin;
+    //   case 5:
+    //     return EKeys.BMaj;
+    //   case 5.5:
+    //     return EKeys.GSharpAFlatMin;
+    //   case 6:
+    //     return EKeys.FSharpGFlatMaj;
+    //   case 6.5:
+    //     return EKeys.DSharpEFlatMin;
+    //   case 7:
+    //     return EKeys.CSharpDFlatMaj;
+    //   case 7.5:
+    //     return EKeys.ASharpBFlatMin;
+    //   case 8:
+    //     return EKeys.GSharpAFlatMaj;
+    //   case 8.5:
+    //     return EKeys.FMin;
+    //   case 9:
+    //     return EKeys.DSharpEFlatMaj;
+    //   case 9.5:
+    //     return EKeys.CMin;
+    //   case 10:
+    //     return EKeys.ASharpBFlatMaj;
+    //   case 10.5:
+    //     return EKeys.GMin;
+    //   case 11:
+    //     return EKeys.FMaj;
+    //   case 11.5:
+    //     return EKeys.DMin;
+    //   default:
+    //     return EKeys.InvalidKey;
+    // }
+  }
+
   applyFilters(): void {}
+}
+
+//Create two seperate enum objects. One representing Keys and another for Circle of Fifths order.
+enum ECircleOf5ths {
+  'C',
+  'Am',
+  'G',
+  'Em',
+  'D',
+  'Bm',
+  'A',
+  'F♯m / G♭m',
+  'E',
+  'C♯m / D♭m',
+  'B',
+  'G♯m / A♭m',
+  'F♯ / G♭',
+  'D♯m / E♭m',
+  'C♯ / D♭',
+  'A♯m / B♭m',
+  'G♯ / A♭',
+  'Fm',
+  'D♯ / E♭',
+  'Cm',
+  'A♯ / B♭',
+  'Gm',
+  'F',
+  'Dm',
+  InvalidKey = 'Invalid Key',
+}
+
+// enum EKeys {
+//   CMaj = 'C',
+//   CSharpDFlatMaj = 'C♯ / D♭',
+//   DMaj = 'D',
+//   DSharpEFlatMaj = 'D♯ / E♭',
+//   EMaj = 'E',
+//   FMaj = 'F',
+//   FSharpGFlatMaj = 'F♯ / G♭',
+//   GMaj = 'G',
+//   GSharpAFlatMaj = 'G♯ / A♭',
+//   AMaj = 'A',
+//   ASharpBFlatMaj = 'A♯ / B♭',
+//   BMaj = 'B',
+//   InvalidKey = 'Invalid Key',
+// }
+enum EKeys {
+  'C',
+  'C♯ / D♭',
+  'D',
+  'D♯ / E♭',
+  'E',
+  'F',
+  'F♯ / G♭',
+  'G',
+  'G♯ / A♭',
+  'A',
+  'A♯ / B♭',
+  'B',
+  'Invalid Key',
 }

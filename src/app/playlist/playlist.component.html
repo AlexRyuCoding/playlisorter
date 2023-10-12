@@ -170,7 +170,19 @@
 
       <ng-container [matColumnDef]="ESortableColumns.key">
         <th mat-sort-header mat-header-cell *matHeaderCellDef>key</th>
-        <td mat-cell *matCellDef="let track">{{ track.key }}</td>
+        <td mat-cell *matCellDef="let track">{{ track.key }} ({{ getHumanReadibleKey(track.key) }})</td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="ESortableColumns.mode">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>mode</th>
+        <td mat-cell *matCellDef="let track">{{ getHumanReadibleMode(track.mode) }}</td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="ESortableColumns.circle_of_fifths">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>Circle of Fifths</th>
+        <td mat-cell *matCellDef="let track">
+          {{ getHumanReadibleKeyMode(track.circle_of_fifths) }} ({{ track.circle_of_fifths }})
+        </td>
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.liveness">
@@ -181,11 +193,6 @@
       <ng-container [matColumnDef]="ESortableColumns.loudness">
         <th mat-sort-header mat-header-cell *matHeaderCellDef>loudness</th>
         <td mat-cell *matCellDef="let track">{{ track.loudness }}</td>
-      </ng-container>
-
-      <ng-container [matColumnDef]="ESortableColumns.mode">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef>mode</th>
-        <td mat-cell *matCellDef="let track">{{ track.mode }}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.speechiness">

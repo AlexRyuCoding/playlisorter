@@ -8,17 +8,31 @@ const spotifyApi = new SpotifyWebApi();
 
 const MAX_LIMIT = 50;
 
-export interface ITrackWFeatures extends SpotifyApi.PlaylistTrackObject, SpotifyApi.AudioFeaturesObject {}
+export interface ITrackWFeatures extends SpotifyApi.PlaylistTrackObject, SpotifyApi.AudioFeaturesObject {
+  circle_of_fifths: number;
+}
+
+export const majorOrder = [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5];
+export const minorOrder = [9, 4, 11, 6, 1, 8, 3, 10, 5, 0, 7, 2];
 
 function mergeTrackInfo(
   tracks: SpotifyApi.PlaylistTrackResponse,
   trackFeatures: SpotifyApi.MultipleAudioFeaturesResponse,
 ): ITrackWFeatures[] {
   if (tracks) {
-    return tracks.items.map((track, index: number) => ({
-      ...track,
-      ...trackFeatures.audio_features[index],
-    }));
+    const trackMap: ITrackWFeatures[] = tracks.items.map((track, index: number) => {
+      const audio_features = trackFeatures.audio_features[index];
+      const circle_of_fifths: number =
+        audio_features.mode === 1
+          ? majorOrder.indexOf(audio_features.key)
+          : minorOrder.indexOf(audio_features.key) + 0.5;
+      return {
+        ...track,
+        ...audio_features,
+        circle_of_fifths,
+      };
+    });
+    return trackMap;
   } else {
     return [];
   }
