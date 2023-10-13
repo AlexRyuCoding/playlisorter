@@ -19,10 +19,7 @@ import {
 import { ITrackWFeatures, SpotifyWebApiService } from '../services/spotify-web-api.service';
 import { StateService } from '../services/state.service';
 import { getAlbumCover } from '../shared';
-
-import { majorOrder } from '../services/spotify-web-api.service';
-
-import { minorOrder } from '../services/spotify-web-api.service';
+import { ECircleOfFifthKeys, EKeys } from './musictheory.utils';
 
 enum ENonSortableColumns {
   'index' = 'index',
@@ -36,22 +33,22 @@ enum ESortableColumns {
   'artist' = 'artist',
   'album_name' = 'album_name',
   'release_date' = 'release_date',
-  'duration_ms' = 'duration_ms',
   'added_at' = 'added_at',
   'popularity' = 'popularity',
+  'tempo' = 'tempo',
+  'circle_of_fifths' = 'circle_of_fifths',
+  'key' = 'key',
+  'mode' = 'mode',
+  'time_signature' = 'time_signature',
   'acousticness' = 'acousticness',
   'danceability' = 'danceability',
   'energy' = 'energy',
   'instrumentalness' = 'instrumentalness',
-  'key' = 'key',
-  'circle_of_fifths' = 'circle_of_fifths',
   'liveness' = 'liveness',
-  'loudness' = 'loudness',
-  'mode' = 'mode',
   'speechiness' = 'speechiness',
-  'tempo' = 'tempo',
-  'time_signature' = 'time_signature',
   'valence' = 'valence',
+  'loudness' = 'loudness',
+  'duration_ms' = 'duration_ms',
 }
 
 enum EDirection {
@@ -471,60 +468,16 @@ export class PlaylistComponent implements OnInit, OnDestroy {
   }
 
   getHumanReadibleMode(mode: number): string {
-    return mode === 1 ? 'Major' : 'Minor';
+    return mode === 1 ? 'MAJOR' : 'minor';
   }
 
-  getHumanReadibleKey(key: number): string {
-    return EKeys[key];
+  getHumanReadibleKey(key: number, mode: number): string {
+    return mode === 1 ? EKeys[key].toLocaleUpperCase() : EKeys[key].toLocaleLowerCase();
   }
 
   getHumanReadibleKeyMode(circle_of_fifths: number): string {
-    return ECircleOf5ths[circle_of_fifths * 2];
+    return ECircleOfFifthKeys[circle_of_fifths * 2];
   }
 
   applyFilters(): void {}
-}
-
-enum ECircleOf5ths {
-  'C',
-  'Am',
-  'G',
-  'Em',
-  'D',
-  'Bm',
-  'A',
-  'F♯m / G♭m',
-  'E',
-  'C♯m / D♭m',
-  'B',
-  'G♯m / A♭m',
-  'F♯ / G♭',
-  'D♯m / E♭m',
-  'C♯ / D♭',
-  'A♯m / B♭m',
-  'G♯ / A♭',
-  'Fm',
-  'D♯ / E♭',
-  'Cm',
-  'A♯ / B♭',
-  'Gm',
-  'F',
-  'Dm',
-  InvalidKey = 'Invalid Key',
-}
-
-enum EKeys {
-  'C',
-  'C♯ / D♭',
-  'D',
-  'D♯ / E♭',
-  'E',
-  'F',
-  'F♯ / G♭',
-  'G',
-  'G♯ / A♭',
-  'A',
-  'A♯ / B♭',
-  'B',
-  'Invalid Key',
 }

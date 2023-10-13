@@ -112,7 +112,7 @@
 
       <!-- track.track-->
       <ng-container [matColumnDef]="ESortableColumns.name" sticky>
-        <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ ESortableColumns.name }}</th>
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>title</th>
         <td mat-cell *matCellDef="let track">{{ getName(track) }}</td>
       </ng-container>
 
@@ -122,55 +122,55 @@
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.album_name">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef>Album</th>
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>album</th>
         <td mat-cell *matCellDef="let track">{{ getAlbumName(track) }}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.release_date">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef>Release Date</th>
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>release date</th>
         <td mat-cell *matCellDef="let track">{{ getReleaseDate(track) | date: 'shortDate' }}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.duration_ms">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef>Duration</th>
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>duration</th>
         <td mat-cell *matCellDef="let track">{{ getDuration(track) | date: 'mm:ss' }}</td>
       </ng-container>
 
       <!-- .track -->
       <ng-container [matColumnDef]="ESortableColumns.added_at">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef>Added At</th>
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>added date</th>
         <td mat-cell *matCellDef="let track">{{ getAddedAt(track) | date: 'short' }}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.popularity">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef>Popularity</th>
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>popularity</th>
         <td mat-cell *matCellDef="let track">{{ getPopularity(track) }}</td>
       </ng-container>
 
       <!--AUDIO FEATURES-->
       <ng-container [matColumnDef]="ESortableColumns.acousticness">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef>Acousticness</th>
-        <td mat-cell *matCellDef="let track">{{ track.acousticness }}</td>
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>acousticness</th>
+        <td mat-cell *matCellDef="let track">{{ track.acousticness | number: '1.3-3' }}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.danceability">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef>Danceability</th>
-        <td mat-cell *matCellDef="let track">{{ track.danceability }}</td>
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>danceability</th>
+        <td mat-cell *matCellDef="let track">{{ track.danceability | number: '1.3-3' }}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.energy">
         <th mat-sort-header mat-header-cell *matHeaderCellDef>energy</th>
-        <td mat-cell *matCellDef="let track">{{ track.energy }}</td>
+        <td mat-cell *matCellDef="let track">{{ track.energy | number: '1.3-3' }}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.instrumentalness">
         <th mat-sort-header mat-header-cell *matHeaderCellDef>instrumentalness</th>
-        <td mat-cell *matCellDef="let track">{{ track.instrumentalness }}</td>
+        <td mat-cell *matCellDef="let track">{{ track.instrumentalness | number: '1.3-3' }}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.key">
         <th mat-sort-header mat-header-cell *matHeaderCellDef>key</th>
-        <td mat-cell *matCellDef="let track">{{ track.key }} ({{ getHumanReadibleKey(track.key) }})</td>
+        <td mat-cell *matCellDef="let track">{{ getHumanReadibleKey(track.key, track.mode) }}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.mode">
@@ -179,40 +179,40 @@
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.circle_of_fifths">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef>Circle of Fifths</th>
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>circle of 5ths</th>
         <td mat-cell *matCellDef="let track">
-          {{ getHumanReadibleKeyMode(track.circle_of_fifths) }} ({{ track.circle_of_fifths }})
+          {{ track.circle_of_fifths | number: '1.1-1' }}
         </td>
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.liveness">
         <th mat-sort-header mat-header-cell *matHeaderCellDef>liveness</th>
-        <td mat-cell *matCellDef="let track">{{ track.liveness }}</td>
+        <td mat-cell *matCellDef="let track">{{ track.liveness | number: '1.3-3' }}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.loudness">
         <th mat-sort-header mat-header-cell *matHeaderCellDef>loudness</th>
-        <td mat-cell *matCellDef="let track">{{ track.loudness }}</td>
+        <td mat-cell *matCellDef="let track">{{ track.loudness | number: '1.3-3' }}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.speechiness">
         <th mat-sort-header mat-header-cell *matHeaderCellDef>speechiness</th>
-        <td mat-cell *matCellDef="let track">{{ track.speechiness }}</td>
+        <td mat-cell *matCellDef="let track">{{ track.speechiness | number: '1.3-3' }}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.tempo">
         <th mat-sort-header mat-header-cell *matHeaderCellDef>tempo</th>
-        <td mat-cell *matCellDef="let track">{{ track.tempo }}</td>
+        <td mat-cell *matCellDef="let track">{{ track.tempo | number: '1.0-0' }}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.time_signature">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef>time_signature</th>
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>time signature</th>
         <td mat-cell *matCellDef="let track">{{ track.time_signature }}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="ESortableColumns.valence">
         <th mat-sort-header mat-header-cell *matHeaderCellDef>valence</th>
-        <td mat-cell *matCellDef="let track">{{ track.valence }}</td>
+        <td mat-cell *matCellDef="let track">{{ track.valence | number: '1.3-3' }}</td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>

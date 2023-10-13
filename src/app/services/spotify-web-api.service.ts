@@ -3,6 +3,7 @@ import { chunk } from 'lodash-es';
 import SpotifyWebApi from 'spotify-web-api-js';
 import { TokenService } from '../spotify-auth';
 import { StateService } from './state.service';
+import { majorOrder, minorOrder } from '../playlist/musictheory.utils';
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -11,9 +12,6 @@ const MAX_LIMIT = 50;
 export interface ITrackWFeatures extends SpotifyApi.PlaylistTrackObject, SpotifyApi.AudioFeaturesObject {
   circle_of_fifths: number;
 }
-
-export const majorOrder = [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5];
-export const minorOrder = [9, 4, 11, 6, 1, 8, 3, 10, 5, 0, 7, 2];
 
 function mergeTrackInfo(
   tracks: SpotifyApi.PlaylistTrackResponse,
